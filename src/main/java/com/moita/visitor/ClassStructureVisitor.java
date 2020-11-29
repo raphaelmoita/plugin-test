@@ -15,6 +15,13 @@ public class ClassStructureVisitor extends JavaRecursiveElementVisitor {
     private final List<PsiField> psiFields = new ArrayList<>();
 
     private String className;
+    private String packageName;
+
+    @Override
+    public void visitJavaFile(PsiJavaFile file) {
+        packageName = file.getPackageStatement().getPackageName();
+        super.visitJavaFile(file);
+    }
 
     @Override
     public void visitClass(PsiClass aClass) {
@@ -49,6 +56,10 @@ public class ClassStructureVisitor extends JavaRecursiveElementVisitor {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 }
 

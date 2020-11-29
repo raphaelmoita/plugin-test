@@ -22,7 +22,7 @@ public class ClassStructureAction extends AnAction {
 
         int answer = Messages.showIdeaMessageDialog(anActionEvent.getProject(),
                 "Which schemas would you like to generate?",
-                "Java to Definition File",
+                "Java to Definition file",
                 new String[] { "Gold", "Silver", "Both", "Cancel"},
                 0,
                 Messages.getQuestionIcon(),null);

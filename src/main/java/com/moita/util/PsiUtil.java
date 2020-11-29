@@ -1,6 +1,6 @@
 package com.moita.util;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
@@ -13,10 +13,9 @@ public class PsiUtil {
     public static final String OBJECT = "Object";
     public static final String SERIALIZABLE = "Serializable";
 
-    public static PsiFile[] findFile(AnActionEvent event, String fileName)
+    public static PsiFile[] findFile(Project project, String fileName)
     {
-        return FilenameIndex.getFilesByName(event.getProject(), fileName,
-                GlobalSearchScope.allScope(event.getProject()));
+        return FilenameIndex.getFilesByName(project, fileName, GlobalSearchScope.projectScope(project));
     }
 
     public static boolean isClassTypeObject(PsiClass aClass)
