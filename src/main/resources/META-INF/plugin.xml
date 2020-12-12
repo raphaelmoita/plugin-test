@@ -23,5 +23,9 @@
                 text="Definition files" description="Definition files Test">
             <add-to-group group-id="CutCopyPasteGroup" anchor="first"/>
         </action>
+        <action id="com.moita.action.CreateAndOpenJsonAction" class="com.moita.action.CreateAndOpenJsonAction"
+                text="Create JSON" description="Create JSON">
+            <add-to-group group-id="CutCopyPasteGroup" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>

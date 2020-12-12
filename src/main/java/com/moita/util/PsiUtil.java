@@ -1,7 +1,12 @@
 package com.moita.util;
 
+import com.intellij.ide.IdeView;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -35,5 +40,32 @@ public class PsiUtil {
     {
         return interfaces.stream()
                 .anyMatch(i -> SERIALIZABLE.equals(i.getName()));
+    }
+
+    public static PsiDirectory findDirectoryFromActionEvent(AnActionEvent actionEvent) {
+
+        DataContext dataContext = actionEvent.getDataContext();
+        IdeView data = LangDataKeys.IDE_VIEW.getData(dataContext);
+
+        if (data == null) {
+            return null;
+        }
+
+        return data.getOrChooseDirectory();
+    }
+
+    public static PsiDirectory findRootDirectory(AnActionEvent actionEvent) {
+
+        PsiDirectory currentDirectory = findDirectoryFromActionEvent(actionEvent);
+        while (!"plugin-test-playground".equals(currentDirectory.getName())) {
+
+            PsiDirectory parentDirectory = currentDirectory.getParentDirectory();
+            if (parentDirectory == null)
+            {
+                return null;
+            }
+            currentDirectory = parentDirectory;
+        }
+        return currentDirectory;
     }
 }
