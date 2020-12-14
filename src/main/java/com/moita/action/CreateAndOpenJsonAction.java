@@ -1,6 +1,7 @@
 package com.moita.action;
 
 import com.intellij.json.json5.Json5FileType;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -11,7 +12,9 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
+import com.moita.util.NotificationUtil;
 import com.moita.util.PsiUtil;
+import com.moita.util.UUIDUtil;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -20,6 +23,40 @@ public class CreateAndOpenJsonAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
+        JsonManager jsonManager = new JsonManager(anActionEvent);
+        Project project = anActionEvent.getProject();
+
+        String uuid = UUIDUtil.getUuid();
+        boolean save = jsonManager.save(UUIDUtil.getUuid() + ".json", "{\"name\":\"moita\"}");
+        notifyIdea(project, uuid, save);
+
+        uuid = UUIDUtil.getUuid();
+        save = jsonManager.save(UUIDUtil.getUuid() + ".json", "{\"name\":\"moita\"}");
+        notifyIdea(project, uuid, save);
+
+        uuid = UUIDUtil.getUuid();
+        save = jsonManager.save(UUIDUtil.getUuid() + ".json", "{\"name\":\"moita\"}");
+        notifyIdea(project, uuid, save);
+
+        uuid = UUIDUtil.getUuid();
+        save = jsonManager.save(UUIDUtil.getUuid() + ".json", "{\"name\":\"moita\"}");
+        notifyIdea(project, uuid, save);
+    }
+
+    private void notifyIdea(Project project, String file, boolean status)
+    {
+        if (status)
+        {
+            NotificationUtil.notify(project, NotificationType.INFORMATION, "Success", file + " created");
+        }
+        else
+        {
+            NotificationUtil.notify(project, NotificationType.ERROR, "Error", file + " cannot be created");
+        }
+    }
+
+    //@Override
+    public void _actionPerformed(AnActionEvent anActionEvent) {
 
         Project project = anActionEvent.getProject();
         try {

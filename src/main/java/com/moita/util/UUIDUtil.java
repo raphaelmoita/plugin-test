@@ -9,4 +9,8 @@ public class UUIDUtil {
 
         System.out.printf(uuid4);
     }
+
+    public static String getUuid() {
+        return UUID.randomUUID().toString();
+    }
 }

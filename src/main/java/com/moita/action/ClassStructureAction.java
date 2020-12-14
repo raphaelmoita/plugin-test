@@ -6,9 +6,8 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
 import com.moita.dialog.PluginDialog;
-import com.moita.visitor.ClassStructureVisitor;
+import com.moita.handler.PsiJavaFileHandler;
 import com.moita.visitor.PluginActivateVisitor;
 
 import static com.moita.util.PsiUtil.isSerializable;
@@ -27,12 +26,11 @@ public class ClassStructureAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
-        PsiJavaFile psiJavaFile = (PsiJavaFile) anActionEvent.getData(CommonDataKeys.PSI_FILE);
-        ClassStructureVisitor visitor = new ClassStructureVisitor();
 
-        psiJavaFile.accept(visitor);
+        PsiJavaFileHandler psiJavaFileHandler = new PsiJavaFileHandler(anActionEvent.getProject(),
+                anActionEvent.getData(CommonDataKeys.PSI_FILE));
 
-        showDialog(anActionEvent.getProject(), visitor.getPackageName() + "." + visitor.getClassName());
+        showDialog(anActionEvent.getProject(), psiJavaFileHandler.getClassName());
 
         int answer = Messages.showIdeaMessageDialog(anActionEvent.getProject(),
                 "Which schemas would you like to generate?",
@@ -45,12 +43,12 @@ public class ClassStructureAction extends AnAction {
             return;
         }
 
-        if (isSerializable(visitor.getPsiInterfaces())) {
+        if (isSerializable(psiJavaFileHandler.getPsiInterfaces())) {
             Messages.showMessageDialog(anActionEvent.getProject(),
-                    visitor.getPsiMethods().toString() + visitor.getPsiFields().toString(),
+                    psiJavaFileHandler.getPsiMethods().toString() + psiJavaFileHandler.getPsiFields().toString(),
                     "Class members", Messages.getInformationIcon());
         } else {
-            Messages.showErrorDialog("Class is not serializable",visitor.getClassName() + " structure");
+            Messages.showErrorDialog("Class is not serializable",psiJavaFileHandler.getClassName() + " structure");
         }
     }
 
